@@ -1,0 +1,49 @@
+{
+  "test_files": [
+    {
+      "file": "sorting.py",
+      "func": "bubble_sort",
+      "args": [[19, 2, 31, 45, 6, 11, 121, 27]]
+    },
+    {
+      "file": "sorting.py",
+      "func": "merge_sort",
+      "args": [[64, 34, 25, 12, 22, 11, 90]]
+    },
+    {
+      "file": "sorting.py",
+      "func": "insertion_sort",
+      "args": [[19, 2, 31, 45, 6, 11, 121, 27]]
+    },
+    {
+      "file": "sorting.py",
+      "func": "shell_sort",
+      "args": [[19, 2, 31, 45, 6, 11, 121, 27]]
+    },
+    {
+      "file": "sorting.py",
+      "func": "selection_sort",
+      "args": [[19, 2, 31, 45, 6, 11, 121, 27]]
+    },
+    {
+      "file": "binary_search.py",
+      "func": "binary_search",
+      "args": [[2, 3, 4, 10, 40], 0, 4, 10]
+    },
+    {
+      "file": "graph_traversal.py",
+      "func": "dfs",
+      "args": [{"A": ["B", "C"], "B": ["A", "D", "E"], "C": ["A", "F"], "D": ["B"], "E": ["B", "F"], "F": ["C", "E"]}, "A"]
+    },
+    {
+      "file": "graph_traversal.py",
+      "func": "bfs",
+      "args": [{"A": ["B", "C"], "B": ["A", "D", "E"], "C": ["A", "F"], "D": ["B"], "E": ["B", "F"], "F": ["C", "E"]}, "A"]
+    },
+    {
+      "file": "knapsack.py",
+      "func": "knapsack",
+      "args": [50, [10, 20, 30], [60, 100, 120], 3]
+    }
+  ]
+}
