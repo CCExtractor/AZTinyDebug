@@ -6,7 +6,7 @@ Use the `pip` package manager to install TinyDebug
 ```shell script
 pip install tinydebug
 ```
-Then, you can either run it as a command-line tool:
+Then, you can run it as a command-line tool:
 ```shell script
 tinydebug --help
 ```
