@@ -1,6 +1,8 @@
 # TinyDebug
 TinyDebug is a Python tool used to create simple, shareable videos of step-by-step execution of code, just like this one:
 
+![Example](assets/example_video.gif)
+
 ## Installation
 Use the `pip` package manager to install TinyDebug
 ```shell script
