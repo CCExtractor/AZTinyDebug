@@ -1,4 +1,6 @@
 import argparse
+import os
+
 from .Debugger import Debugger
 from .ConsoleReporter import ConsoleReporter
 from .TestSuite import TestSuite
@@ -46,6 +48,7 @@ def main():
                                                         "Example: \"--video prog.py foo result.tinydebug video.mp4\" creates a video of the results of running the function foo in prog.py,",
                                                         "assuming they were already analyzed using --debug and saved in result.tinydebug, and saves the video as video.mp4."]),
                              metavar=("PYTHON_FILE", "FUNCTION", "ANALYSIS_FILE", "VIDEO_OUTPUT"), nargs=4)
+    video_group.add_argument("--video-config", help="Path of video config file, in .yaml format.", default=os.path.dirname(__file__) + "/video_config.yaml")
 
     args = parser.parse_args()
 
@@ -66,7 +69,7 @@ def main():
         if output_file_path:
             extension = Path(args.output).suffix
             if extension == ".mp4" or extension == ".gif":
-                reporter = VideoReporter(func, results)
+                reporter = VideoReporter(func, results, args.video_config)
                 reporter.generate_video(output_file_path)
             else:
                 write_results(output_file_path, results)
@@ -77,7 +80,7 @@ def main():
         reporter = ConsoleReporter(read_results(args.parse))
         reporter.print_results()
     elif args.video:
-        reporter = VideoReporter(func_from_file(args.video[0], args.video[1]), read_results(args.video[2]))
+        reporter = VideoReporter(func_from_file(args.video[0], args.video[1]), read_results(args.video[2]), args.video_config)
         reporter.generate_video(args.video[3])
     else:
         print("Whoops, you didn't provide any arguments! Run \"tinydebug --help\" for more info on how to use this program.")

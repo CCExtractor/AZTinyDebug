@@ -1,0 +1,24 @@
+# Video configuration file
+
+size:
+  width: 1920     # Video width, in pixels
+  height: 1080    # Video height, in pixels
+fps: 2            # Frames per second
+
+theme: dracula
+
+fonts:
+  default:
+    font-family: SourceCodePro
+    font-size: 16
+  intro-text:
+    font-family: OpenSansBold
+    font-size: 60
+
+# Enable / disable "created with TinyDebug" watermark in the bottom-right corner of the video
+watermark: on
+
+# Custom intro text to place in the beginning of the video
+intro-text:
+  text: "Demo Video"  # Any text
+  time: 3  # Time to display intro text, in seconds
