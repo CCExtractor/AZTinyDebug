@@ -19,7 +19,7 @@ def run_all_tests(output_directory):
             file_path, func_name, func_args = Path(test_obj["file"]), test_obj["func"], test_obj["args"]
 
             func = func_from_file(test_suite_dir / file_path, func_name)
-            debugger = Debugger(func, func_args)
+            debugger = Debugger(func, func_args, [str(file_path)])
             results = debugger.run()
 
             if output_directory:

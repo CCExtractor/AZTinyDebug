@@ -19,11 +19,17 @@ class VideoReporter:
                 self.color_theme = yaml.safe_load(theme_file)
 
     def __wrap_text(self, font, text, max_width):
+        """Wrap text to the screen, not assuming monospace (slow)"""
         num_chars = len(text)
         while font.getsize_multiline(textwrap.fill(text, num_chars))[0] >= max_width:
             num_chars -= 1
 
         return textwrap.fill(text, num_chars)
+
+    def __wrap_monospace_text(self, font, text, max_width):
+        """Assuming font is monospace (code), wrap the text to max_width"""
+        char_width = font.getsize("A")[0]
+        return textwrap.fill(text, int(max_width / char_width))
 
     def __draw_intro_text(self):
         intro_text = self.config["intro-text"]["text"]
@@ -62,10 +68,26 @@ class VideoReporter:
         draw = ImageDraw.Draw(img)
 
         # Source code section
-        draw.rectangle((0, (current_step['line_num'] - self.start_line) * font_size, frame_size[0] * 0.4, (current_step['line_num'] - self.start_line + 1) * font_size),
-                       fill=self.color_theme["current-line-color"])
+        current_text_y = 0
+        current_line_y, next_line_y = 0, 0
+
+        lines_to_write = []  # List of (y, line) where y is the top y of the text
         for line_offset, line in enumerate(self.source_lines):
-            draw.text((0, line_offset * font_size), self.source_lines[line_offset], font=font, fill=self.color_theme["text-color"])
+            line = self.__wrap_monospace_text(font, self.source_lines[line_offset], frame_size[0] * 0.4)
+            lines_to_write.append((current_text_y, line))
+
+            # Keep track of the y of the current line, in order to draw the current line rectangle later
+            if line_offset == current_step['line_num'] - self.start_line:
+                current_line_y = current_text_y
+                next_line_y = current_text_y + font.getsize_multiline(line)[1]
+
+            current_text_y += font.getsize_multiline(line)[1]
+
+        # Current line rectangle
+        draw.rectangle((0, current_line_y, frame_size[0] * 0.4, next_line_y), fill=self.color_theme["current-line-color"])
+
+        for y, line in lines_to_write:
+            draw.text((0, y), line, font=font, fill=self.color_theme["text-color"])
 
         # Step section
         draw.text((0, frame_size[1] * 0.8), "Step: {}, line: {}".format(current_step['step'], current_step['line_num']), font=font, fill=self.color_theme["text-color"])
@@ -119,7 +141,6 @@ class VideoReporter:
         draw.line((0, frame_size[1] * 0.8, frame_size[0] * 0.4, frame_size[1] * 0.8), fill=line_color, width=5)
 
         # Watermark
-        print(self.config["watermark"])
         if self.config["watermark"]:
             watermark_font = ImageFont.truetype(os.path.dirname(__file__) + "/fonts/OpenSansBold.ttf", 22)
             text_width, text_height = watermark_font.getsize("Created using TinyDebug")
