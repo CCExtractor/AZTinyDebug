@@ -18,6 +18,8 @@ class ConsoleReporter:
         else:
             print("\033[92mDisplaying results for function {}({}).\033[0m".format(code_info["function_name"], ", ".join(str(arg) for arg in code_info["function_args"])))
 
+        print("\033[92mCommand line arguments: {}\033[0m".format(code_info["cmd_args"]))
+
         print("\033[92mExecution log:\033[0m")
         execution_log = self.results["execution_log"]
         for step in execution_log:

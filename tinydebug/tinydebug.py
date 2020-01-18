@@ -28,6 +28,7 @@ def main():
     debug_group.add_argument("--func", help=".\n".join(
         ["If --debug FILE is present, optionally provide the name of a function to debug and function arguments", "(defaults to main with no arguments)",
          "Example: \"--func foo 1 \"Hello World\" 2\" will run foo(1, \"Hello World\", 2)."]), nargs='+', default=["main"], metavar=("FUNC", "PARAMETER"))
+    debug_group.add_argument("--args", help="If --debug FILE is present, optionally provide command-line arguments to pass to the program.", nargs="+", default=[])
     debug_group.add_argument("--output", help=".\n".join(["If --debug FILE is present, optionally provide a file path to save analysis results to",
                                                           "Results are saved in video format if the extension is *.mp4 or *.gif, or in an internal format otherwise",
                                                           "(if --output FILE is not provided, the results are printed to console)",
@@ -61,7 +62,7 @@ def main():
         func = func_from_file(debug_file_path, func_name)
         func_args = [parse_func_arg(arg) for arg in args.func[1:]]
 
-        debugger = Debugger(func, func_args)
+        debugger = Debugger(func, func_args, [debug_file_path] + args.args)
         results = debugger.run()
 
         output_file_path = args.output

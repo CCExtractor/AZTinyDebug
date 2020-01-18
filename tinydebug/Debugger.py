@@ -10,10 +10,11 @@ class Debugger:
     Receives a function object and function arguments in a list, runs the function while tracing it and produces results.
     """
 
-    def __init__(self, func, func_args):
+    def __init__(self, func, func_args, cmd_args):
         self.func = func
         self.func_name = func.__name__
         self.func_args = func_args
+        self.cmd_args = cmd_args
 
         self.curr_line = None
         self.prev_variables = {}
@@ -22,7 +23,7 @@ class Debugger:
         self.prev_time = time.time()
         self.step = 1
 
-        self.results = {"code_info": {"function_name": self.func_name, "function_args": self.func_args}, "execution_log": [], "variable_history": [], "line_history": []}
+        self.results = {"code_info": {"function_name": self.func_name, "function_args": self.func_args, "cmd_args": self.cmd_args}, "execution_log": [], "variable_history": [], "line_history": []}
 
     def run(self):
         """
@@ -31,6 +32,7 @@ class Debugger:
         """
         sys.settrace(self.__trace_calls)
         self.prev_time = time.time()
+        sys.argv = self.cmd_args
         self.results["returned_value"] = self.func(*self.func_args)
         sys.settrace(None)
 
